@@ -11,7 +11,6 @@ interface GalleryImage {
     id: string;
     url: string;
     category: string;
-    position?: string;
 }
 
 const CATEGORIES = ['Learning Space', 'Academy', 'Celebrations'];
@@ -87,7 +86,7 @@ export function GalleryManager() {
                 const publicUrl = await uploadImage(file);
                 const { error: dbError } = await supabase
                     .from('gallery')
-                    .insert([{ url: publicUrl, category: uploadData.category, position: 'center' }]);
+                    .insert([{ url: publicUrl, category: uploadData.category }]);
 
                 if (dbError) throw dbError;
                 successCount++;
@@ -108,20 +107,6 @@ export function GalleryManager() {
         }
 
         setIsUploading(false);
-    };
-
-    const updatePosition = async (id: string, newPosition: string) => {
-        const { error } = await supabase
-            .from('gallery')
-            .update({ position: newPosition })
-            .eq('id', id);
-
-        if (error) {
-            toast.error('Failed to update position');
-        } else {
-            setImages(prev => prev.map(img => img.id === id ? { ...img, position: newPosition } : img));
-            toast.success('Focus point updated');
-        }
     };
 
     const handleDelete = async (id: string, url: string) => {
@@ -289,38 +274,17 @@ export function GalleryManager() {
                             <img 
                                 src={image.url} 
                                 alt="" 
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
-                                style={{ objectPosition: image.position || 'center' }}
+                                className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105" 
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                            
-                            {/* Admin Controls Overlay */}
-                            <div className="absolute inset-x-3 bottom-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-                                <div className="flex items-center justify-between">
-                                    <span className="bg-white/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold text-slate-800 shadow-sm">{image.category}</span>
-                                    <button
-                                        onClick={() => handleDelete(image.id, image.url)}
-                                        className="w-8 h-8 rounded-lg bg-red-500 hover:bg-red-600 text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"
-                                    >
-                                        <Trash2 className="w-3.5 h-3.5" />
-                                    </button>
-                                </div>
-                                
-                                <div className="flex bg-white/90 backdrop-blur p-1 rounded-lg shadow-sm border border-slate-100">
-                                    {['top', 'center', 'bottom'].map((pos) => (
-                                        <button
-                                            key={pos}
-                                            onClick={() => updatePosition(image.id, pos)}
-                                            className={`flex-1 text-[9px] font-bold uppercase py-1 rounded transition-colors ${
-                                                (image.position || 'center') === pos 
-                                                    ? 'bg-emerald-600 text-white' 
-                                                    : 'text-slate-500 hover:bg-slate-100'
-                                            }`}
-                                        >
-                                            {pos}
-                                        </button>
-                                    ))}
-                                </div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                                <span className="bg-white/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold text-slate-800 shadow-sm">{image.category}</span>
+                                <button
+                                    onClick={() => handleDelete(image.id, image.url)}
+                                    className="w-8 h-8 rounded-lg bg-red-500 hover:bg-red-600 text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110"
+                                >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                </button>
                             </div>
                         </div>
                     ))}

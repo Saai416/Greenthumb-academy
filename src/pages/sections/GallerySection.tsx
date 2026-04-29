@@ -8,7 +8,6 @@ interface GalleryImage {
   id: string;
   url: string;
   category: string;
-  position?: string;
 }
 
 const CATEGORIES = [
@@ -29,7 +28,7 @@ export function GallerySection() {
       setFetchError(null);
       const { data, error } = await supabase
         .from('gallery')
-        .select('id, url, category, position')
+        .select('id, url, category')
         .order('created_at', { ascending: false });
 
       console.log('[Gallery] Public fetch result:', { data, error });
@@ -83,7 +82,6 @@ export function GallerySection() {
                 <BentoCard
                   key={img.id}
                   src={img.url}
-                  position={img.position || 'center'}
                   categoryLabel={activeCategory?.label || ''}
                   index={i}
                   isFeatured={i === 0 && activeTab === 'learning'} // Mock featured for first image
@@ -116,13 +114,11 @@ export function GallerySection() {
 
 function BentoCard({
   src,
-  position,
   categoryLabel,
   index,
   isFeatured
 }: {
   src: string;
-  position: string;
   categoryLabel: string;
   index: number;
   isFeatured?: boolean;
@@ -132,7 +128,7 @@ function BentoCard({
   return (
     <div
       className={cn(
-        "group relative rounded-2xl overflow-hidden bg-slate-100 shadow-sm flex-shrink-0 snap-start",
+        "group relative rounded-2xl overflow-hidden bg-white shadow-sm flex-shrink-0 snap-start",
         "transition-all duration-500 hover:shadow-xl hover:-translate-y-1",
         "w-[300px] sm:w-[400px] h-[260px]"
       )}
@@ -147,8 +143,7 @@ function BentoCard({
           src={src}
           alt=""
           loading="lazy"
-          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-          style={{ objectPosition: position }}
+          className="w-full h-full object-contain transition-transform duration-700 ease-out group-hover:scale-105"
           onError={() => setErrored(true)}
         />
       )}
