@@ -27,13 +27,13 @@ function ProgramCard({ title, description, index, imageUrl }: ProgramCardProps) 
       className="reveal-target group relative bg-white rounded-3xl border border-zinc-200 overflow-hidden flex flex-col h-full shadow-md hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
     >
       {/* 1. Image Container (Top) */}
-      <div className="relative w-full aspect-[16/10] overflow-hidden shrink-0">
+      <div className="relative w-full aspect-[16/10] overflow-hidden shrink-0 bg-white">
         {hasImage ? (
           <img
             src={imageUrl}
             alt={title}
             loading="lazy"
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
             onError={() => setImgErrored(true)}
           />
         ) : (

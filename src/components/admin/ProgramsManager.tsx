@@ -151,7 +151,7 @@ export function ProgramsManager() {
                                             <img
                                                 src={formData.image ? URL.createObjectURL(formData.image) : formData.imageUrl}
                                                 alt=""
-                                                className="w-full h-full object-cover"
+                                                className="w-full h-full object-contain"
                                             />
                                         ) : (
                                             <ImageIcon className="w-6 h-6 text-slate-300" />
@@ -198,12 +198,12 @@ export function ProgramsManager() {
                     {programs.map((program) => (
                         <div key={program.id} className="bg-white rounded-xl border border-slate-200/80 overflow-hidden flex flex-col group hover:shadow-md transition-all">
                             {/* Thumbnail */}
-                            <div className="h-44 w-full overflow-hidden relative bg-slate-100">
+                            <div className="h-44 w-full overflow-hidden relative bg-white">
                                 {program.image_url ? (
                                     <img
                                         src={program.image_url}
                                         alt={program.title}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                                         onError={(e) => {
                                             (e.target as HTMLImageElement).style.display = 'none';
                                         }}
