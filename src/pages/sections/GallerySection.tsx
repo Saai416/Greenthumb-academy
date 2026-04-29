@@ -143,7 +143,7 @@ function BentoCard({
           src={src}
           alt=""
           loading="lazy"
-          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+          className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-110"
           onError={() => setErrored(true)}
         />
       )}
