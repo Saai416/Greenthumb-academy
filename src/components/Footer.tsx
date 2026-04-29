@@ -141,7 +141,6 @@ export function Footer() {
             © {year} {ACADEMY_NAME}. All rights reserved.
           </p>
         </div>
-        </div>
       </div>
     </footer>
   );
