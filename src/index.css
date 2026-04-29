@@ -1,0 +1,305 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-display: "Outfit";
+    --font-body: "Inter";
+    --font-mono: monospace;
+    --radius: 0.75rem;
+
+    --background: 0.98 0.006 230;
+    --foreground: 0.18 0.015 230;
+    --card: 1.0 0.004 230;
+    --card-foreground: 0.18 0.015 230;
+    --popover: 1.0 0.004 230;
+    --popover-foreground: 0.18 0.015 230;
+
+    --primary: 0.42 0.16 140;
+    --primary-foreground: 0.98 0.005 140;
+
+    --secondary: 0.95 0.01 230;
+    --secondary-foreground: 0.28 0.015 230;
+    --muted: 0.94 0.01 230;
+    --muted-foreground: 0.5 0.012 230;
+
+    --accent: 0.55 0.18 140;
+    --accent-foreground: 0.98 0.005 140;
+
+    --destructive: 0.55 0.22 25;
+    --destructive-foreground: 0.98 0.005 25;
+
+    --border: 0.9 0.008 230;
+    --input: 0.9 0.008 230;
+    --ring: 0.42 0.16 140;
+
+    --chart-1: 0.55 0.18 140;
+    --chart-2: 0.6 0.16 185;
+    --chart-3: 0.65 0.14 100;
+    --chart-4: 0.5 0.17 20;
+    --chart-5: 0.7 0.12 60;
+
+    --sidebar: 0.98 0.004 230;
+    --sidebar-foreground: 0.18 0.015 230;
+    --sidebar-primary: 0.42 0.16 140;
+    --sidebar-primary-foreground: 0.98 0.005 140;
+    --sidebar-accent: 0.95 0.01 230;
+    --sidebar-accent-foreground: 0.28 0.015 230;
+    --sidebar-border: 0.9 0.008 230;
+    --sidebar-ring: 0.42 0.16 140;
+  }
+
+  .dark {
+    --background: 0.14 0.015 140;
+    --foreground: 0.92 0.01 150;
+    --card: 0.18 0.018 140;
+    --card-foreground: 0.92 0.01 150;
+    --popover: 0.22 0.02 140;
+    --popover-foreground: 0.92 0.01 150;
+
+    --primary: 0.65 0.18 140;
+    --primary-foreground: 0.14 0.015 140;
+
+    --secondary: 0.22 0.02 140;
+    --secondary-foreground: 0.85 0.01 150;
+    --muted: 0.22 0.02 140;
+    --muted-foreground: 0.55 0.015 140;
+
+    --accent: 0.7 0.16 140;
+    --accent-foreground: 0.14 0.015 140;
+
+    --destructive: 0.55 0.22 25;
+    --destructive-foreground: 0.92 0.01 25;
+
+    --border: 0.28 0.02 140;
+    --input: 0.28 0.02 140;
+    --ring: 0.65 0.18 140;
+
+    --chart-1: 0.65 0.18 140;
+    --chart-2: 0.6 0.16 185;
+    --chart-3: 0.7 0.14 100;
+    --chart-4: 0.58 0.17 20;
+    --chart-5: 0.75 0.12 60;
+
+    --sidebar: 0.18 0.018 140;
+    --sidebar-foreground: 0.92 0.01 150;
+    --sidebar-primary: 0.65 0.18 140;
+    --sidebar-primary-foreground: 0.14 0.015 140;
+    --sidebar-accent: 0.22 0.02 140;
+    --sidebar-accent-foreground: 0.85 0.01 150;
+    --sidebar-border: 0.28 0.02 140;
+    --sidebar-ring: 0.65 0.18 140;
+  }
+
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer utilities {
+  .transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass {
+    @apply backdrop-blur-md bg-white/30 border border-white/20;
+  }
+
+  .glass-dark {
+    @apply backdrop-blur-md bg-black/20 border border-white/10;
+  }
+
+  .glass-card {
+    @apply backdrop-blur-sm bg-white/60 border border-white/40 shadow-sm;
+  }
+
+  .fade-up {
+    animation: fadeUp 0.6s ease-out both;
+  }
+
+  .fade-in {
+    animation: fadeIn 0.5s ease-out both;
+  }
+
+  .scale-in {
+    animation: scaleIn 0.4s ease-out both;
+  }
+
+  .slide-in {
+    animation: slideIn 0.5s ease-out both;
+  }
+
+  /* Scroll-reveal base state */
+  .reveal-target {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1), transform 0.65s
+      cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .reveal-target.revealed {
+    opacity: 1;
+    transform: none;
+  }
+  .reveal-left {
+    opacity: 0;
+    transform: translateX(-32px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+  .reveal-left.revealed {
+    opacity: 1;
+    transform: none;
+  }
+  .reveal-right {
+    opacity: 0;
+    transform: translateX(32px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+  .reveal-right.revealed {
+    opacity: 1;
+    transform: none;
+  }
+  .reveal-scale {
+    opacity: 0;
+    transform: scale(0.92);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal-scale.revealed {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Image hover zoom */
+  .img-zoom {
+    @apply overflow-hidden;
+  }
+  .img-zoom img {
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .img-zoom:hover img {
+    transform: scale(1.07);
+  }
+
+  /* Shadow utilities */
+  .shadow-soft {
+    box-shadow: 0 4px 24px -4px oklch(0.42 0.16 140 / 0.12), 0 1px 4px -1px
+      oklch(0.42 0.16 140 / 0.08);
+  }
+  .shadow-card {
+    box-shadow: 0 2px 12px -2px rgba(0, 0, 0, 0.08), 0 1px 4px -1px
+      rgba(0, 0, 0, 0.04);
+  }
+  .shadow-hero {
+    box-shadow: 0 8px 40px -8px oklch(0.42 0.16 140 / 0.25);
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  @keyframes pulseSlow {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.6;
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  @keyframes shimmer {
+    0% {
+      background-position: -200% center;
+    }
+    100% {
+      background-position: 200% center;
+    }
+  }
+  @keyframes scrollX {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+  .animate-pulse-slow {
+    animation: pulseSlow 3s ease-in-out infinite;
+  }
+  .animate-scroll-x {
+    animation: scrollX 30s linear infinite;
+  }
+
+  /* Snap scroll for gallery */
+  .snap-x-scroll {
+    @apply flex gap-4 overflow-x-auto pb-4;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: oklch(var(--primary) / 0.3) transparent;
+  }
+  .snap-x-scroll::-webkit-scrollbar {
+    height: 4px;
+  }
+  .snap-x-scroll::-webkit-scrollbar-thumb {
+    background: oklch(var(--primary) / 0.3);
+    border-radius: 99px;
+  }
+  .snap-x-scroll > * {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+  }
+}
