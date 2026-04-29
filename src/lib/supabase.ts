@@ -1,24 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Try both import.meta.env (standard Vite) and process.env (vite-plugin-environment)
-const supabaseUrl =
-  import.meta.env.VITE_SUPABASE_URL ||
-  (typeof process !== 'undefined' ? process.env.VITE_SUPABASE_URL : undefined);
+// Supabase project credentials
+// The anon key is safe to expose in client-side code (it has row-level security)
+const SUPABASE_URL = 'https://reqvllhplxqowngnhrac.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJlcXZsbGhwbHhxb3duZ25ocmFjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMTg2NjcsImV4cCI6MjA5Mjg5NDY2N30.3AE9ZI_6KNOAIztZ9d9lpbqwvy7pqtPmhEP8ShmWO6o';
 
-const supabaseAnonKey =
-  import.meta.env.VITE_SUPABASE_ANON_KEY ||
-  (typeof process !== 'undefined' ? process.env.VITE_SUPABASE_ANON_KEY : undefined);
-
-if (!supabaseUrl || !supabaseAnonKey || supabaseUrl === 'undefined') {
-  console.warn('Supabase credentials missing. DB features will not work.');
-}
-
-const validUrl = supabaseUrl && supabaseUrl !== 'undefined'
-  ? supabaseUrl
-  : 'https://placeholder.supabase.co';
-
-const validKey = supabaseAnonKey && supabaseAnonKey !== 'undefined'
-  ? supabaseAnonKey
-  : 'placeholder';
-
-export const supabase = createClient(validUrl, validKey);
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
