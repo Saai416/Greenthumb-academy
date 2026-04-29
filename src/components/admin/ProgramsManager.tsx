@@ -13,7 +13,6 @@ interface Program {
     title: string;
     description: string;
     image_url: string;
-    display_order?: number;
 }
 
 export function ProgramsManager() {
@@ -28,7 +27,6 @@ export function ProgramsManager() {
         description: '',
         image: null as File | null,
         imageUrl: '',
-        displayOrder: undefined as number | undefined,
     });
 
     const fetchPrograms = async () => {
@@ -36,7 +34,6 @@ export function ProgramsManager() {
         const { data, error } = await supabase
             .from('programs')
             .select('*')
-            .order('display_order', { ascending: true, nullsFirst: true })
             .order('created_at', { ascending: false });
         if (error) {
             toast.error('Failed to fetch programs');
@@ -58,11 +55,10 @@ export function ProgramsManager() {
                 description: program.description,
                 image: null,
                 imageUrl: program.image_url,
-                displayOrder: program.display_order,
             });
         } else {
             setEditProgram(null);
-            setFormData({ title: '', description: '', image: null, imageUrl: '', displayOrder: undefined });
+            setFormData({ title: '', description: '', image: null, imageUrl: '' });
         }
         setDialogOpen(true);
     };
@@ -79,7 +75,6 @@ export function ProgramsManager() {
                 title: formData.title,
                 description: formData.description,
                 image_url: finalImageUrl,
-                display_order: formData.displayOrder,
             };
             if (editProgram) {
                 const { error } = await supabase.from('programs').update(programData).eq('id', editProgram.id);
@@ -141,28 +136,15 @@ export function ProgramsManager() {
                                     required
                                 />
                             </div>
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-1.5">
-                                    <label className="text-[13px] font-semibold text-slate-600">Description</label>
-                                    <Textarea
-                                        value={formData.description}
-                                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                        placeholder="Course highlights..."
-                                        className="min-h-[100px] rounded-lg text-[14px]"
-                                        required
-                                    />
-                                </div>
-                                <div className="space-y-1.5">
-                                    <label className="text-[13px] font-semibold text-slate-600">Display Order (Optional)</label>
-                                    <Input
-                                        type="number"
-                                        value={formData.displayOrder || ''}
-                                        onChange={(e) => setFormData({ ...formData, displayOrder: e.target.value ? parseInt(e.target.value) : undefined })}
-                                        placeholder="e.g. 1, 2, 3..."
-                                        className="h-10 rounded-lg text-[14px]"
-                                    />
-                                    <p className="text-[10px] text-slate-400 mt-1">Leave empty for new courses to show first.</p>
-                                </div>
+                            <div className="space-y-1.5">
+                                <label className="text-[13px] font-semibold text-slate-600">Description</label>
+                                <Textarea
+                                    value={formData.description}
+                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                    placeholder="Course highlights..."
+                                    className="min-h-[100px] rounded-lg text-[14px]"
+                                    required
+                                />
                             </div>
                             <div className="space-y-1.5">
                                 <label className="text-[13px] font-semibold text-slate-600">Thumbnail</label>
