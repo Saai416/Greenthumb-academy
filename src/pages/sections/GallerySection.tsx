@@ -77,7 +77,7 @@ export function GallerySection() {
         ) : (
           <div className="relative">
             <div
-              className="flex gap-4 overflow-x-auto pb-8 snap-x no-scrollbar scroll-smooth"
+              className="flex w-full gap-4 overflow-x-auto pb-8 snap-x no-scrollbar scroll-smooth"
             >
               {activeImages.map((img, i) => (
                 <BentoCard

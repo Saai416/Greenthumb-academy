@@ -12,7 +12,7 @@ import { Toaster } from "sonner";
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden w-full">
       <Toaster position="top-right" richColors closeButton />
       <Header />
       <main>
