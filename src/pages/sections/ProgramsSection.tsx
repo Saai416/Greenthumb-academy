@@ -120,6 +120,7 @@ interface Program {
   title: string;
   description: string;
   image_url: string;
+  display_order?: number;
 }
 
 export function ProgramsSection() {
@@ -131,7 +132,8 @@ export function ProgramsSection() {
       const { data, error } = await supabase
         .from('programs')
         .select('*')
-        .order('created_at', { ascending: true });
+        .order('display_order', { ascending: true, nullsFirst: true })
+        .order('created_at', { ascending: false });
 
       if (error) {
         console.error('[Programs] Fetch error:', error);
