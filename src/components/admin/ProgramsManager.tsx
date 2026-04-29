@@ -13,7 +13,6 @@ interface Program {
     title: string;
     description: string;
     image_url: string;
-    category: string;
 }
 
 export function ProgramsManager() {
@@ -26,7 +25,6 @@ export function ProgramsManager() {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
-        category: '',
         image: null as File | null,
         imageUrl: '',
     });
@@ -52,13 +50,12 @@ export function ProgramsManager() {
             setFormData({
                 title: program.title,
                 description: program.description,
-                category: program.category,
                 image: null,
                 imageUrl: program.image_url,
             });
         } else {
             setEditProgram(null);
-            setFormData({ title: '', description: '', category: '', image: null, imageUrl: '' });
+            setFormData({ title: '', description: '', image: null, imageUrl: '' });
         }
         setDialogOpen(true);
     };
@@ -74,7 +71,6 @@ export function ProgramsManager() {
             const programData = {
                 title: formData.title,
                 description: formData.description,
-                category: formData.category,
                 image_url: finalImageUrl,
             };
             if (editProgram) {
@@ -127,26 +123,15 @@ export function ProgramsManager() {
                             </DialogTitle>
                         </DialogHeader>
                         <form onSubmit={handleSave} className="p-6 space-y-5">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-1.5">
-                                    <label className="text-[13px] font-semibold text-slate-600">Title</label>
-                                    <Input
-                                        value={formData.title}
-                                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                        placeholder="e.g. Mathematics"
-                                        className="h-10 rounded-lg text-[14px]"
-                                        required
-                                    />
-                                </div>
-                                <div className="space-y-1.5">
-                                    <label className="text-[13px] font-semibold text-slate-600">Category</label>
-                                    <Input
-                                        value={formData.category}
-                                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                                        placeholder="e.g. 6th–12th Grade"
-                                        className="h-10 rounded-lg text-[14px]"
-                                    />
-                                </div>
+                            <div className="space-y-1.5">
+                                <label className="text-[13px] font-semibold text-slate-600">Title</label>
+                                <Input
+                                    value={formData.title}
+                                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                    placeholder="e.g. Mathematics"
+                                    className="h-10 rounded-lg text-[14px]"
+                                    required
+                                />
                             </div>
                             <div className="space-y-1.5">
                                 <label className="text-[13px] font-semibold text-slate-600">Description</label>
@@ -226,13 +211,6 @@ export function ProgramsManager() {
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center">
                                         <BookOpen className="w-10 h-10 text-slate-200" />
-                                    </div>
-                                )}
-                                {program.category && (
-                                    <div className="absolute top-3 left-3">
-                                        <span className="bg-white/90 backdrop-blur px-2.5 py-1 rounded-md text-[10px] font-bold text-slate-700 shadow-sm uppercase tracking-wider">
-                                            {program.category}
-                                        </span>
                                     </div>
                                 )}
                             </div>

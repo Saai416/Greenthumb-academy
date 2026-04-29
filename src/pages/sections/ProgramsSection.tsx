@@ -53,9 +53,7 @@ function ProgramCard({ title, description, index, imageUrl }: ProgramCardProps) 
             <h3 className="font-display font-bold text-lg sm:text-xl leading-tight uppercase tracking-wide">
               {title}
             </h3>
-            <p className="text-white/80 text-xs mt-1 font-medium italic">
-              All type of Entrance exam coaching
-            </p>
+
           </div>
         </div>
       </div>
@@ -122,7 +120,6 @@ interface Program {
   title: string;
   description: string;
   image_url: string;
-  category: string;
 }
 
 export function ProgramsSection() {
