@@ -20,7 +20,6 @@ export function AdminLayout({ children, activeTab, setActiveTab }: AdminLayoutPr
         { id: 'programs', label: 'Courses', icon: BookOpen },
         { id: 'gallery', label: 'Gallery', icon: ImageIcon },
         { id: 'banners', label: 'Announcements', icon: Flag },
-        { id: 'health', label: 'System Health', icon: ShieldCheck },
     ];
 
     return (
