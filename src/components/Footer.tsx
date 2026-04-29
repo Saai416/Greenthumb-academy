@@ -140,17 +140,7 @@ export function Footer() {
           <p>
             © {year} {ACADEMY_NAME}. All rights reserved.
           </p>
-          <p>
-            Built with love using{" "}
-            <a
-              href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(hostname)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-primary transition-smooth"
-            >
-              caffeine.ai
-            </a>
-          </p>
+        </div>
         </div>
       </div>
     </footer>

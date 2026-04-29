@@ -2,7 +2,7 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
-import { Loader2, ImageOff, Image as ImageIcon } from "lucide-react";
+import { Loader2, ImageOff, Image as ImageIcon, X } from "lucide-react";
 
 interface GalleryImage {
   id: string;
@@ -21,6 +21,7 @@ export function GallerySection() {
   const [activeTab, setActiveTab] = useState<string>(CATEGORIES[0].id);
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchGallery = async () => {
@@ -85,6 +86,7 @@ export function GallerySection() {
                   categoryLabel={activeCategory?.label || ''}
                   index={i}
                   isFeatured={i === 0 && activeTab === 'learning'} // Mock featured for first image
+                  onClick={() => setSelectedImage(img.url)}
                 />
               ))}
               {activeImages.length === 0 && (
@@ -94,6 +96,31 @@ export function GallerySection() {
                 </div>
               )}
             </div>
+
+            {/* Lightbox Modal */}
+            {selectedImage && (
+              <div 
+                className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4 sm:p-10 animate-in fade-in duration-300"
+                onClick={() => setSelectedImage(null)}
+              >
+                <button 
+                  className="absolute top-6 right-6 p-2 text-white/70 hover:text-white transition-colors bg-white/10 rounded-full hover:bg-white/20"
+                  onClick={() => setSelectedImage(null)}
+                >
+                  <X className="w-6 h-6" />
+                </button>
+                <div 
+                  className="relative max-w-full max-h-full rounded-xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <img 
+                    src={selectedImage} 
+                    alt="Gallery Full View" 
+                    className="max-w-full max-h-[90vh] object-contain"
+                  />
+                </div>
+              </div>
+            )}
 
             {/* Scroll Progress Bar (Matches User Screenshot) */}
             {activeImages.length > 0 && (
@@ -116,19 +143,22 @@ function BentoCard({
   src,
   categoryLabel,
   index,
-  isFeatured
+  isFeatured,
+  onClick
 }: {
   src: string;
   categoryLabel: string;
   index: number;
   isFeatured?: boolean;
+  onClick: () => void;
 }) {
   const [errored, setErrored] = useState(false);
 
   return (
     <div
+      onClick={onClick}
       className={cn(
-        "group relative rounded-2xl overflow-hidden bg-white shadow-sm flex-shrink-0 snap-start",
+        "group relative rounded-2xl overflow-hidden bg-white shadow-sm flex-shrink-0 snap-start cursor-pointer",
         "transition-all duration-500 hover:shadow-xl hover:-translate-y-1",
         "w-[300px] sm:w-[400px] h-[260px]"
       )}
