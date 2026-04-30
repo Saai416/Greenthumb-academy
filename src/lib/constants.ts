@@ -1,6 +1,6 @@
 export const ACADEMY_NAME = "Green Thumb Academy";
-export const PHONE_NUMBER = "+91-9876543210";
-export const WHATSAPP_NUMBER = "919876543210";
+export const PHONE_NUMBER = "+91 90805 83518";
+export const WHATSAPP_NUMBER = "919080583518";
 export const WHATSAPP_MESSAGE = encodeURIComponent(
   "Hello! I'm interested in enrolling at Green Thumb Academy. Please share more details about courses and fees.",
 );
