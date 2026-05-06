@@ -115,13 +115,14 @@ export function Header() {
             </span>
             <span
               style={{
-                fontFamily: "'Inter', sans-serif",
-                fontWeight: 700,
-                fontSize: "clamp(10px, 2.5vw, 13px)",
-                letterSpacing: "0.25em",
+                fontFamily: "'Playfair Display', serif",
+                fontWeight: 900,
+                fontSize: "clamp(18px, 4vw, 26px)",
+                letterSpacing: "0.5px",
+                color: "#2D8659", // Bright primary green
                 textTransform: "uppercase",
-                color: "#555555",
-                marginTop: "4px",
+                whiteSpace: "nowrap",
+                marginTop: "-2px", // Slight negative margin to keep lines tight
               }}
             >
               Academy

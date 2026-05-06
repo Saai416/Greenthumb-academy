@@ -17,7 +17,7 @@ export const WORKING_HOURS = [
   { days: "Sunday", hours: "9:00 AM – 1:00 PM" },
 ];
 
-export const EMAIL = "info@greenthumbacademy.in";
+export const EMAIL = "greenthumbacademy.edu@gmail.com";
 
 export const NAV_LINKS = [
   { label: "Home", href: "#home" },

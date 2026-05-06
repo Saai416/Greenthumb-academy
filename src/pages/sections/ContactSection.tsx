@@ -150,7 +150,7 @@ export function ContactSection() {
             {/* Google Maps embed */}
             <div className="overflow-hidden rounded-2xl shadow-soft border border-border">
               <iframe
-                src="https://www.google.com/maps?q=5,+2nd+Cross+Street,+Sai+Balaji+Nagar,+Pallikaranai,+Chennai+600100&output=embed"
+                src="https://www.google.com/maps?q=Green+Thumb+Academy,+Green+Thumb+Academy+building,+5,+Devaraj+Nagar+2nd+St,+Sai+Balaji+Nagar,+Pallikaranai,+Chennai,+Tamil+Nadu+600100&output=embed"
                 width="100%"
                 height="400"
                 style={{ border: 0, display: "block" }}
