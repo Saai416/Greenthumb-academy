@@ -5,7 +5,7 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
-import { Loader2, Plus, Edit2, Trash2, Image as ImageIcon, BookOpen } from 'lucide-react';
+import { Loader2, Plus, Edit2, Trash2, Image as ImageIcon, BookOpen, UploadCloud } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface Program {
@@ -148,28 +148,66 @@ export function ProgramsManager() {
                             </div>
                             <div className="space-y-1.5">
                                 <label className="text-[13px] font-semibold text-slate-600">Thumbnail</label>
-                                <div className="flex items-center gap-4 p-4 border border-dashed border-slate-200 rounded-lg bg-slate-50/50">
-                                    <div className="w-16 h-16 rounded-lg overflow-hidden bg-white border border-slate-100 flex items-center justify-center shrink-0">
-                                        {formData.image || formData.imageUrl ? (
-                                            <img
-                                                src={formData.image ? URL.createObjectURL(formData.image) : formData.imageUrl}
-                                                alt=""
-                                                className="w-full h-full object-contain"
-                                            />
-                                        ) : (
-                                            <ImageIcon className="w-6 h-6 text-slate-300" />
-                                        )}
-                                    </div>
-                                    <div className="flex-1 space-y-1.5">
-                                        <Input
-                                            type="file"
-                                            accept="image/*"
-                                            onChange={(e) => setFormData({ ...formData, image: e.target.files?.[0] || null })}
-                                            className="border-none bg-transparent shadow-none h-auto px-0 text-[13px]"
-                                        />
-                                        <p className="text-[11px] text-slate-400">Recommended: 800×450px (16:9)</p>
-                                    </div>
-                                </div>
+                                <label className="flex flex-col items-center justify-center w-full h-44 border-2 border-dashed border-slate-300 rounded-xl bg-slate-50 hover:bg-emerald-50 hover:border-emerald-500 transition-colors cursor-pointer relative overflow-hidden group">
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => setFormData({ ...formData, image: e.target.files?.[0] || null })}
+                                        style={{ display: 'none' }}
+                                    />
+                                    {formData.image || formData.imageUrl ? (
+                                        <div className="absolute inset-0 w-full h-full p-2">
+                                            <div className="relative w-full h-full rounded-lg overflow-hidden border border-slate-200 bg-white">
+                                                <img
+                                                    src={formData.image ? URL.createObjectURL(formData.image) : formData.imageUrl}
+                                                    alt="Preview"
+                                                    className="w-full h-full object-contain"
+                                                />
+                                                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-6 transition-opacity backdrop-blur-[2px]">
+                                                    <div className="flex flex-col items-center group/replace">
+                                                        <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mb-2 group-hover/replace:bg-white/30 group-hover/replace:scale-110 transition-all text-white">
+                                                            <UploadCloud className="w-5 h-5" />
+                                                        </div>
+                                                        <p className="text-white text-xs font-medium">Replace</p>
+                                                    </div>
+                                                    
+                                                    <button
+                                                        type="button"
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            e.stopPropagation();
+                                                            setFormData({ ...formData, image: null, imageUrl: '' });
+                                                            const fileInput = e.currentTarget.closest('label')?.querySelector('input[type="file"]') as HTMLInputElement;
+                                                            if (fileInput) fileInput.value = '';
+                                                        }}
+                                                        className="flex flex-col items-center group/delete"
+                                                    >
+                                                        <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center mb-2 group-hover/delete:bg-red-500/40 group-hover/delete:scale-110 transition-all text-red-100">
+                                                            <Trash2 className="w-5 h-5" />
+                                                        </div>
+                                                        <p className="text-red-100 text-xs font-medium">Delete</p>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="flex flex-col items-center justify-center text-slate-500 w-full">
+                                            <div className="w-12 h-12 mb-4 rounded-full bg-emerald-50 shadow-sm flex items-center justify-center text-emerald-600 transition-colors">
+                                                <UploadCloud className="w-6 h-6" />
+                                            </div>
+                                            <div className="px-5 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-[14px] shadow-sm transition-colors mb-2">
+                                                Choose Image File
+                                            </div>
+                                            <p className="text-[12px] text-slate-400 mt-1">Recommended: 800×450px (16:9)</p>
+                                        </div>
+                                    )}
+                                </label>
+                                {formData.image && (
+                                    <p className="text-[12px] text-emerald-600 font-medium px-1 flex items-center gap-1.5 mt-1">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 block" />
+                                        Selected: {formData.image.name}
+                                    </p>
+                                )}
                             </div>
                             <Button
                                 type="submit"
@@ -223,18 +261,18 @@ export function ProgramsManager() {
                                 <p className="text-slate-500 text-[13px] leading-relaxed line-clamp-2 mb-4 flex-1">{program.description}</p>
                                 <div className="flex gap-2">
                                     <Button
-                                        variant="ghost"
+                                        variant="outline"
                                         size="sm"
                                         onClick={() => handleOpenDialog(program)}
-                                        className="flex-1 rounded-lg h-9 border border-slate-100 hover:bg-slate-50 gap-1.5 text-slate-600 font-medium text-[13px]"
+                                        className="flex-1 rounded-lg h-9 border-slate-200 hover:bg-slate-50 hover:text-emerald-700 gap-1.5 text-slate-600 font-medium text-[13px]"
                                     >
                                         <Edit2 className="w-3.5 h-3.5" /> Edit
                                     </Button>
                                     <Button
-                                        variant="ghost"
+                                        variant="outline"
                                         size="sm"
                                         onClick={() => handleDelete(program.id)}
-                                        className="rounded-lg h-9 text-red-500 hover:bg-red-50 hover:text-red-600 gap-1.5 font-medium text-[13px] px-3"
+                                        className="rounded-lg h-9 border-slate-200 text-red-500 hover:bg-red-50 hover:text-red-600 gap-1.5 font-medium text-[13px] px-3"
                                     >
                                         <Trash2 className="w-3.5 h-3.5" />
                                     </Button>

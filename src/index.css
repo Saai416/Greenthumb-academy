@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -6,10 +6,10 @@
 
 @layer base {
   :root {
-    --font-display: "Outfit";
-    --font-body: "Inter";
+    --font-display: "Poppins", sans-serif;
+    --font-body: "Inter", sans-serif;
     --font-mono: monospace;
-    --radius: 0.75rem;
+    --radius: 1rem;
 
     --background: 0.98 0.006 230;
     --foreground: 0.18 0.015 230;
@@ -277,6 +277,18 @@
       transform: translateX(-50%);
     }
   }
+  @keyframes heroZoom {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.1);
+    }
+  }
+
+  .animate-hero-zoom {
+    animation: heroZoom 15s ease-in-out infinite alternate;
+  }
 
   .animate-float {
     animation: float 4s ease-in-out infinite;
@@ -305,5 +317,27 @@
   .snap-x-scroll > * {
     scroll-snap-align: start;
     flex-shrink: 0;
+  }
+
+  /* ── Hero responsive overrides ───────────────────────────────────────────── */
+  @media (max-width: 767px) {
+    /* Stack hero buttons full-width on mobile */
+    [data-ocid="hero.enroll_button"],
+    [data-ocid="hero.whatsapp_button"] {
+      width: 100% !important;
+      justify-content: center;
+      min-height: 52px !important;
+    }
+    /* Ensure hero content area is well padded on very small screens */
+    [data-ocid="hero.section"] .hero-content {
+      align-items: center;
+    }
+  }
+
+  @media (max-width: 480px) {
+    /* Tighten headline letter-spacing on tiny screens */
+    [data-ocid="hero.section"] h1 {
+      letter-spacing: -0.5px !important;
+    }
   }
 }

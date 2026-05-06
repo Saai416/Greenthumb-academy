@@ -86,7 +86,7 @@ export function ContactSection() {
             {/* Address */}
             <ContactCard icon={<MapPin size={20} />} title="Our Address">
               <p className="font-medium text-foreground">
-                Green Thumb Academy, Anna Nagar
+                Green Thumb Academy, Pallikaranai
               </p>
               <p className="text-muted-foreground">
                 {ADDRESS.line1}, {ADDRESS.line2}
@@ -150,14 +150,14 @@ export function ContactSection() {
             {/* Google Maps embed */}
             <div className="overflow-hidden rounded-2xl shadow-soft border border-border">
               <iframe
-                src={MAPS_EMBED_URL}
+                src="https://www.google.com/maps?q=5,+2nd+Cross+Street,+Sai+Balaji+Nagar,+Pallikaranai,+Chennai+600100&output=embed"
                 width="100%"
                 height="400"
                 style={{ border: 0, display: "block" }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Green Thumb Academy — Anna Nagar, Chennai"
+                title="Green Thumb Academy — Pallikaranai, Chennai"
                 data-ocid="contact.map"
               />
             </div>

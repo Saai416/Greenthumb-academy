@@ -44,7 +44,7 @@ function ProgramCard({ title, description, index, imageUrl }: ProgramCardProps) 
       </div>
 
       {/* 2. Middle Section (Gradient + Title) */}
-      <div className="relative bg-gradient-to-r from-[#003399] to-[#0099cc] p-6 text-white shrink-0">
+      <div className="relative bg-gradient-to-r from-primary to-emerald-600 p-6 text-white shrink-0">
         <div className="flex items-center gap-4">
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 backdrop-blur-md shadow-inner">
             <BookOpen className="h-6 w-6 text-white" />
@@ -65,7 +65,7 @@ function ProgramCard({ title, description, index, imageUrl }: ProgramCardProps) 
         </p>
 
         <button 
-          className="mt-auto flex items-center gap-2 text-[#003399] font-bold text-sm hover:underline group/link"
+          className="mt-auto flex items-center gap-2 text-primary font-bold text-sm hover:underline group/link"
           onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
         >
           Enquire about this program

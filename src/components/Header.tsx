@@ -6,15 +6,16 @@ import {
   PHONE_NUMBER,
   WHATSAPP_URL,
 } from "@/lib/constants";
-import { Leaf, Menu, MessageCircle, Phone, X } from "lucide-react";
+import { Menu, Phone, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { SiWhatsapp } from "react-icons/si";
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 20);
+    const handler = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
   }, []);
@@ -28,150 +29,356 @@ export function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${scrolled
-        ? "bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl shadow-lg border-b border-zinc-200/50 dark:border-zinc-800/50 py-1"
-        : "bg-white/60 dark:bg-zinc-950/60 backdrop-blur-md shadow-sm py-2"
-        }`}
+      style={{
+        position: "sticky",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 40,
+        background: "#ffffff",
+        borderBottom: "1px solid #e8e8e8",
+        boxShadow: scrolled
+          ? "0 2px 16px rgba(0,0,0,0.08)"
+          : "0 1px 0 #ebebeb",
+        transition: "box-shadow 0.3s ease",
+      }}
     >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <button
-            type="button"
-            onClick={() => scrollTo("#home")}
-            data-ocid="header.logo_link"
-            className="flex items-center gap-2.5 transition-smooth group"
+      <div
+        style={{
+          maxWidth: "1280px",
+          margin: "0 auto",
+          padding: "0 clamp(16px, 3vw, 32px)",
+          display: "flex",
+          height: "72px",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: "16px",
+        }}
+      >
+        {/* ── Logo ── */}
+        <button
+          type="button"
+          onClick={() => scrollTo("#home")}
+          data-ocid="header.logo_link"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "clamp(6px, 1.5vw, 10px)",
+            background: "transparent",
+            border: "none",
+            cursor: "pointer",
+            padding: "4px 6px",
+            borderRadius: "8px",
+            flexShrink: 0,
+          }}
+        >
+          {/* Logo circle */}
+          <div
+            style={{
+              width: "clamp(40px, 8vw, 56px)",
+              height: "clamp(40px, 8vw, 56px)",
+              borderRadius: "50%",
+              overflow: "hidden",
+              border: "2px solid #e0e0e0",
+              flexShrink: 0,
+              background: "#f5f5f5",
+            }}
           >
-            <div className="relative h-10 w-10 sm:h-12 sm:w-12 shrink-0 overflow-hidden rounded-full border-2 border-primary/20 bg-white shadow-sm group-hover:border-primary/40 transition-all duration-300">
-              <img 
-                src="/gallery/logo.jpeg" 
-                alt={ACADEMY_NAME} 
-                className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-300"
-              />
-            </div>
-            <div className="flex flex-col items-start leading-none">
-              <span
-                className="font-display font-extrabold tracking-tight uppercase bg-gradient-to-r from-primary via-emerald-500 to-teal-600 bg-clip-text text-transparent drop-shadow-sm text-base sm:text-lg"
-                style={{ WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
-              >
-                Green Thumb
-              </span>
-              <span className="text-zinc-500 dark:text-zinc-400 font-display font-semibold text-[10px] sm:text-xs tracking-[0.25em] uppercase mt-0.5">
-                Academy
-              </span>
-            </div>
-          </button>
-
-          {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-1">
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollTo(link.href);
-                }}
-                data-ocid={`header.nav_${link.label.toLowerCase()}_link`}
-                className={`px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full hover:bg-primary/10 ${scrolled ? 'text-foreground/70 hover:text-primary' : 'text-foreground/80 dark:text-white/80 hover:text-primary dark:hover:text-white hover:bg-primary/5 dark:hover:bg-white/10'
-                  }`}
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
-
-          {/* Desktop Actions */}
-          <div className="hidden md:flex items-center gap-4">
-            <a
-              href={`tel:${PHONE_NUMBER.replace(/\s/g, "")}`}
-              data-ocid="header.call_button"
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-smooth ${scrolled ? 'text-foreground/80 hover:text-primary hover:bg-primary/5' : 'text-foreground/90 dark:text-white/90 hover:bg-primary/5 dark:hover:bg-white/10'
-                }`}
-            >
-              <Phone className="h-4 w-4" />
-              <span className="hidden xl:inline">{PHONE_NUMBER}</span>
-              <span className="xl:hidden">Call</span>
-            </a>
-            <a
-              href={WHATSAPP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-ocid="header.whatsapp_button"
-            >
-              <Button
-                size="sm"
-                className="bg-[#25D366] hover:bg-[#20c05c] text-white gap-2 border-0 shadow-lg hover:shadow-xl transition-all rounded-full px-5"
-              >
-                <MessageCircle className="h-4 w-4" />
-                WhatsApp
-              </Button>
-            </a>
-
+            <img
+              src="/gallery/logo.jpeg"
+              alt={ACADEMY_NAME}
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
           </div>
 
-          {/* Mobile Menu */}
-          <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-            <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="lg:hidden"
-                data-ocid="header.mobile_menu_button"
-                aria-label="Open menu"
-              >
-                {mobileOpen ? (
-                  <X className="h-5 w-5" />
-                ) : (
-                  <Menu className="h-5 w-5" />
-                )}
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-72 pt-12">
-              <nav className="flex flex-col gap-1">
-                {NAV_LINKS.map((link) => (
-                  <button
-                    type="button"
-                    key={link.href}
-                    onClick={() => scrollTo(link.href)}
-                    data-ocid={`mobile_nav.${link.label.toLowerCase()}_link`}
-                    className="w-full text-left px-4 py-3 rounded-lg text-foreground/80 hover:text-primary hover:bg-primary/5 transition-smooth font-medium"
-                  >
-                    {link.label}
-                  </button>
-                ))}
-                <div className="mt-4 flex flex-col gap-2 px-2">
-                  <a
-                    href={`tel:${PHONE_NUMBER.replace(/\s/g, "")}`}
-                    className="w-full"
-                  >
-                    <Button
-                      variant="outline"
-                      className="w-full gap-2"
-                      data-ocid="mobile_nav.call_button"
-                    >
-                      <Phone className="h-4 w-4" /> {PHONE_NUMBER}
-                    </Button>
-                  </a>
-                  <a
-                    href={WHATSAPP_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full"
-                  >
-                    <Button
-                      className="w-full gap-2 bg-[#25D366] hover:bg-[#20c05c] text-white border-0"
-                      data-ocid="mobile_nav.whatsapp_button"
-                    >
-                      <MessageCircle className="h-4 w-4" /> WhatsApp
-                    </Button>
-                  </a>
+          {/* Logo text */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              lineHeight: 1,
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontWeight: 900,
+                fontSize: "clamp(18px, 4vw, 26px)",
+                letterSpacing: "0.5px",
+                color: "#2D8659", // Bright primary green
+                textTransform: "uppercase",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Green Thumb
+            </span>
+            <span
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 700,
+                fontSize: "clamp(10px, 2.5vw, 13px)",
+                letterSpacing: "0.25em",
+                textTransform: "uppercase",
+                color: "#555555",
+                marginTop: "4px",
+              }}
+            >
+              Academy
+            </span>
+          </div>
+        </button>
 
-                </div>
-              </nav>
-            </SheetContent>
-          </Sheet>
+        {/* ── Desktop Nav (center) ── */}
+        <nav
+          aria-label="Main navigation"
+          className="hidden lg:flex"
+          style={{
+            alignItems: "center",
+            gap: "2px",
+            flex: 1,
+            justifyContent: "center",
+          }}
+        >
+          {NAV_LINKS.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollTo(link.href);
+              }}
+              data-ocid={`header.nav_${link.label.toLowerCase()}_link`}
+              style={{
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: 500,
+                fontSize: "14px",
+                color: "#333333",
+                textDecoration: "none",
+                padding: "7px 14px",
+                borderRadius: "6px",
+                transition: "color 0.2s ease, background 0.2s ease",
+                whiteSpace: "nowrap",
+              }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLAnchorElement;
+                el.style.color = "#2D8659";
+                el.style.background = "rgba(45,134,89,0.07)";
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLAnchorElement;
+                el.style.color = "#333333";
+                el.style.background = "transparent";
+              }}
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
+
+        {/* ── Desktop Actions (right) ── */}
+        <div
+          className="hidden md:flex items-center"
+          style={{ gap: "10px", flexShrink: 0 }}
+        >
+          {/* Phone */}
+          <a
+            href={`tel:${PHONE_NUMBER.replace(/\s/g, "")}`}
+            data-ocid="header.call_button"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              fontFamily: "'Poppins', sans-serif",
+              fontWeight: 500,
+              fontSize: "13.5px",
+              color: "#444444",
+              textDecoration: "none",
+              padding: "7px 10px",
+              borderRadius: "6px",
+              whiteSpace: "nowrap",
+              transition: "color 0.2s ease, background 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              const el = e.currentTarget as HTMLAnchorElement;
+              el.style.color = "#2D8659";
+              el.style.background = "rgba(45,134,89,0.06)";
+            }}
+            onMouseLeave={(e) => {
+              const el = e.currentTarget as HTMLAnchorElement;
+              el.style.color = "#444444";
+              el.style.background = "transparent";
+            }}
+          >
+            <Phone
+              style={{ width: "15px", height: "15px", flexShrink: 0, color: "#2D8659" }}
+            />
+            <span className="hidden xl:inline">{PHONE_NUMBER}</span>
+            <span className="xl:hidden">Call</span>
+          </a>
+
+          {/* WhatsApp CTA */}
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-ocid="header.whatsapp_button"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "7px",
+              background: "#25D366",
+              color: "#ffffff",
+              border: "none",
+              padding: "9px 20px",
+              borderRadius: "8px",
+              fontFamily: "'Poppins', sans-serif",
+              fontWeight: 600,
+              fontSize: "14px",
+              textDecoration: "none",
+              cursor: "pointer",
+              whiteSpace: "nowrap",
+              transition:
+                "background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease",
+            }}
+            onMouseEnter={(e) => {
+              const el = e.currentTarget as HTMLAnchorElement;
+              el.style.background = "#20c05c";
+              el.style.boxShadow = "0 4px 14px rgba(37,211,102,0.40)";
+              el.style.transform = "translateY(-1px)";
+            }}
+            onMouseLeave={(e) => {
+              const el = e.currentTarget as HTMLAnchorElement;
+              el.style.background = "#25D366";
+              el.style.boxShadow = "none";
+              el.style.transform = "translateY(0)";
+            }}
+          >
+            <SiWhatsapp style={{ width: "16px", height: "16px", flexShrink: 0 }} />
+            WhatsApp
+          </a>
         </div>
+
+        {/* ── Mobile Hamburger ── */}
+        <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+          <SheetTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="lg:hidden"
+              data-ocid="header.mobile_menu_button"
+              aria-label="Open menu"
+              style={{ color: "#333333" }}
+            >
+              {mobileOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
+            </Button>
+          </SheetTrigger>
+          <SheetContent
+            side="right"
+            className="w-72 pt-12"
+            style={{
+              background: "#ffffff",
+              border: "none",
+              boxShadow: "-4px 0 24px rgba(0,0,0,0.10)",
+            }}
+          >
+            <nav className="flex flex-col gap-1">
+              {NAV_LINKS.map((link) => (
+                <button
+                  type="button"
+                  key={link.href}
+                  onClick={() => scrollTo(link.href)}
+                  data-ocid={`mobile_nav.${link.label.toLowerCase()}_link`}
+                  style={{
+                    width: "100%",
+                    textAlign: "left",
+                    padding: "13px 16px",
+                    borderRadius: "8px",
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                    fontFamily: "'Poppins', sans-serif",
+                    fontWeight: 500,
+                    fontSize: "15px",
+                    color: "#333333",
+                    transition: "color 0.2s ease, background 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget as HTMLButtonElement;
+                    el.style.color = "#2D8659";
+                    el.style.background = "rgba(45,134,89,0.07)";
+                  }}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget as HTMLButtonElement;
+                    el.style.color = "#333333";
+                    el.style.background = "transparent";
+                  }}
+                >
+                  {link.label}
+                </button>
+              ))}
+
+              <div
+                style={{
+                  marginTop: "16px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "10px",
+                  padding: "0 8px",
+                }}
+              >
+                <a
+                  href={`tel:${PHONE_NUMBER.replace(/\s/g, "")}`}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px",
+                    padding: "13px 16px",
+                    borderRadius: "8px",
+                    border: "1.5px solid #e0e0e0",
+                    color: "#333333",
+                    textDecoration: "none",
+                    fontFamily: "'Poppins', sans-serif",
+                    fontWeight: 500,
+                    fontSize: "14px",
+                    background: "#f9f9f9",
+                  }}
+                >
+                  <Phone style={{ width: "16px", height: "16px", color: "#2D8659" }} />
+                  {PHONE_NUMBER}
+                </a>
+                <a
+                  href={WHATSAPP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-ocid="mobile_nav.whatsapp_button"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px",
+                    padding: "13px 16px",
+                    borderRadius: "8px",
+                    background: "#25D366",
+                    color: "#ffffff",
+                    textDecoration: "none",
+                    fontFamily: "'Poppins', sans-serif",
+                    fontWeight: 600,
+                    fontSize: "14px",
+                  }}
+                >
+                  <SiWhatsapp style={{ width: "16px", height: "16px" }} />
+                  WhatsApp Us
+                </a>
+              </div>
+            </nav>
+          </SheetContent>
+        </Sheet>
       </div>
     </header>
   );

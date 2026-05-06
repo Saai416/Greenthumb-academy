@@ -2,14 +2,14 @@ export const ACADEMY_NAME = "Green Thumb Academy";
 export const PHONE_NUMBER = "+91 90805 83518";
 export const WHATSAPP_NUMBER = "919080583518";
 export const WHATSAPP_MESSAGE = encodeURIComponent(
-  "Hello! I'm interested in enrolling at Green Thumb Academy. Please share more details about courses and fees.",
+  "Dear Sir/Madam, I am exploring the possibility of enrolling at Green Thumb Academy. Kindly share detailed information regarding your course offerings and associated fees.",
 );
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MESSAGE}`;
 
 export const ADDRESS = {
-  line1: "No. 42, Anna Nagar East",
-  line2: "Chennai - 600 102",
-  state: "Tamil Nadu, India",
+  line1: "5, 2nd Cross Street",
+  line2: "Sai Balaji Nagar",
+  state: "Pallikaranai, Chennai 600100",
 };
 
 export const WORKING_HOURS = [
@@ -117,39 +117,32 @@ export const FEATURES = [
 
 export const TESTIMONIALS = [
   {
-    name: "Priya Menon",
-    role: "Parent",
-    rating: 5,
-    text: "My daughter's grades improved dramatically. The Maths coaching is exceptional!",
-    avatar: "PM",
-  },
-  {
-    name: "Arun Kumar",
+    name: "Abhinav Kaimal",
     role: "Student",
     rating: 5,
-    text: "Best place to learn. The teachers are patient, knowledgeable, and truly caring.",
+    text: "I would like to share my experience of studying at my tuition. For me, it is the best tuition because it has not only improved my studies but also built my confidence. The teachers explain every concept so clearly and make learning very easy.",
     avatar: "AK",
   },
   {
-    name: "Kavitha Rajan",
+    name: "Subha Shiny",
     role: "Parent",
     rating: 5,
-    text: "The abacus and phonics classes gave my son such a strong foundation. Highly recommended!",
-    avatar: "KR",
+    text: "I wanted to take a moment to express my appreciation for the incredible support you have provided to my son. Your teaching style is not only effective but also incredibly nurturing, making learning enjoyable for him. He has truly flourished.",
+    avatar: "SS",
   },
   {
-    name: "Meena Sharma",
+    name: "Rekha Magesh",
     role: "Parent",
     rating: 5,
-    text: "Excellent faculty, safe environment, and great attention to each child. So happy we enrolled.",
-    avatar: "MS",
+    text: "Best Teaching and Excellent yoga Class and other Classes Super 👌👍✨",
+    avatar: "RM",
   },
   {
-    name: "Divya Nair",
-    role: "Student (Class XII)",
+    name: "Divya Divya",
+    role: "Student",
     rating: 5,
-    text: "Chess and career counseling sessions were life-changing. I feel so prepared now.",
-    avatar: "DN",
+    text: "Absolute cinema 🔥🔥. Best tution everrr",
+    avatar: "DD",
   },
 ];
 
