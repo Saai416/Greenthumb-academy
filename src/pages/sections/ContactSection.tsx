@@ -150,7 +150,7 @@ export function ContactSection() {
             {/* Google Maps embed */}
             <div className="overflow-hidden rounded-2xl shadow-soft border border-border">
               <iframe
-                src="https://www.google.com/maps?q=Green+Thumb+Academy,+Green+Thumb+Academy+building,+5,+Devaraj+Nagar+2nd+St,+Sai+Balaji+Nagar,+Pallikaranai,+Chennai,+Tamil+Nadu+600100&output=embed"
+                src="https://www.google.com/maps?q=12.929821,80.215268&output=embed"
                 width="100%"
                 height="400"
                 style={{ border: 0, display: "block" }}
@@ -226,7 +226,7 @@ export function ContactSection() {
                 Ready to Join Our Academy?
               </h3>
               <p className="text-primary-foreground/80 font-body mb-6 max-w-lg mx-auto">
-                Admissions open for 2025–26. Enroll now for early-bird benefits
+                Admissions open. Enroll now for early-bird benefits
                 and a personalised orientation session.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
