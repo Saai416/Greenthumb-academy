@@ -9,8 +9,7 @@ import {
 import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { SiWhatsapp } from "react-icons/si";
 
-const MAPS_EMBED_URL =
-  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15545.038937498174!2d80.20954905000001!3d13.0852565!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a52643d8c17b3f3%3A0x3e50a28d6abc42ae!2sAnna%20Nagar%2C%20Chennai%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1714199000000!5m2!1sen!2sin";
+
 
 interface ContactCardProps {
   icon: React.ReactNode;
@@ -148,9 +147,9 @@ export function ContactSection() {
             data-ocid="contact.map_panel"
           >
             {/* Google Maps embed */}
-            <div className="overflow-hidden rounded-2xl shadow-soft border border-border">
+            <div className="relative overflow-hidden rounded-2xl shadow-soft border border-border group/map">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3888.655942970907!2d80.21269307507578!3d12.929820987381776!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTLCsDU1JzQ3LjQiTiA4MMKwMTInNTUuMCJF!5e0!3m2!1sen!2sin!4v1778211540642!5m2!1sen!2sin"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.661!2d80.215322!3d12.930005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDU1JzQ4LjAiTiA4MMKwMTInNTUuMiJF!5e0!3m2!1sen!2sin!4v1715340000000!5m2!1sen!2sin"
                 width="100%"
                 height="400"
                 style={{ border: 0, display: "block" }}
@@ -160,6 +159,20 @@ export function ContactSection() {
                 title="Green Thumb Academy — Pallikaranai, Chennai"
                 data-ocid="contact.map"
               />
+              {/* Clickable overlay — opens directions in Google Maps */}
+              <a
+                href="https://www.google.com/maps/dir/?api=1&destination=12.930005,80.215322"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-ocid="contact.map_directions_overlay"
+                aria-label="Get directions to Green Thumb Academy on Google Maps"
+                className="absolute inset-0 z-10 flex items-end justify-center pb-4 opacity-0 group-hover/map:opacity-100 transition-opacity duration-300"
+              >
+                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-semibold shadow-hero pointer-events-none">
+                  <MapPin size={15} />
+                  Get Directions
+                </span>
+              </a>
             </div>
 
             {/* Quick-action row */}
