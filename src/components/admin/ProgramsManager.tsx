@@ -34,11 +34,44 @@ export function ProgramsManager() {
         const { data, error } = await supabase
             .from('programs')
             .select('*')
-            .order('created_at', { ascending: false });
+            .order('created_at', { ascending: true }); // Ascending so new courses go to the end
         if (error) {
             toast.error('Failed to fetch programs');
-        } else {
-            setPrograms(data || []);
+        } else if (data) {
+            let sorted = [...data];
+            
+            // 1. Move Maths to first
+            const mathsIdx = sorted.findIndex(p => p.title.toLowerCase().includes('math') && !p.title.toLowerCase().includes('vedic'));
+            if (mathsIdx > -1) {
+                const [maths] = sorted.splice(mathsIdx, 1);
+                sorted.unshift(maths);
+            }
+            
+            // 2. Move Tuition to second
+            const tuitionIdx = sorted.findIndex(p => p.title.toLowerCase().includes('tuition') || p.title.toLowerCase().includes('all subject'));
+            if (tuitionIdx > -1) {
+                const [tuition] = sorted.splice(tuitionIdx, 1);
+                sorted.splice(1, 0, tuition);
+            }
+            
+            // 3. Move Yoga and Karate to the very end
+            const yogaIdx = sorted.findIndex(p => p.title.toLowerCase().includes('yoga'));
+            let yogaItem = null;
+            if (yogaIdx > -1) {
+                [yogaItem] = sorted.splice(yogaIdx, 1);
+            }
+
+            const karateIdx = sorted.findIndex(p => p.title.toLowerCase().includes('karate'));
+            let karateItem = null;
+            if (karateIdx > -1) {
+                [karateItem] = sorted.splice(karateIdx, 1);
+            }
+
+            // Append them at the very end (Yoga first, then Karate)
+            if (yogaItem) sorted.push(yogaItem);
+            if (karateItem) sorted.push(karateItem);
+
+            setPrograms(sorted);
         }
         setLoading(false);
     };
