@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import { LayoutDashboard, BookOpen, Image as ImageIcon, Flag, LogOut, Leaf, ChevronRight, ShieldCheck, Menu } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Image as ImageIcon, Flag, LogOut, Leaf, ChevronRight, ShieldCheck, Menu, Settings } from 'lucide-react';
 
 interface AdminLayoutProps {
     children: React.ReactNode;
@@ -20,6 +20,7 @@ export function AdminLayout({ children, activeTab, setActiveTab }: AdminLayoutPr
         { id: 'programs', label: 'Courses', icon: BookOpen },
         { id: 'gallery', label: 'Gallery', icon: ImageIcon },
         { id: 'banners', label: 'Announcements', icon: Flag },
+        { id: 'settings', label: 'Settings', icon: Settings },
     ];
 
     return (
@@ -36,7 +37,7 @@ export function AdminLayout({ children, activeTab, setActiveTab }: AdminLayoutPr
                         />
                     </div>
                     <div className={`${isCollapsed ? 'opacity-0 scale-95' : 'opacity-100 scale-100'} transition-all duration-300 origin-left`}>
-                        <h1 className="text-[15px] font-bold text-white leading-tight">Green Thumb</h1>
+                        <h1 className="text-[15px] font-bold text-white leading-tight">Green Thumb Academy</h1>
                         <p className="text-[10px] text-slate-400 font-medium tracking-wider uppercase">Admin Console</p>
                     </div>
                 </div>

@@ -10,6 +10,7 @@ import { ProgramsManager } from '../components/admin/ProgramsManager';
 import { GalleryManager } from '../components/admin/GalleryManager';
 import { BannerManager } from '../components/admin/BannerManager';
 import { SupabaseDiagnostics } from '../components/admin/SupabaseDiagnostics';
+import { SettingsManager } from '../components/admin/SettingsManager';
 
 export function AdminPage() {
     const { user, loading } = useAuth();
@@ -99,11 +100,6 @@ export function AdminPage() {
                                 description="Update hero announcements"
                                 onClick={() => setActiveTab('banners')}
                             />
-                            <ActionCard
-                                title="System Health"
-                                description="Verify Supabase status"
-                                onClick={() => setActiveTab('health')}
-                            />
                         </div>
                     </div>
                 </div>
@@ -112,6 +108,7 @@ export function AdminPage() {
             {activeTab === 'programs' && <ProgramsManager />}
             {activeTab === 'gallery' && <GalleryManager />}
             {activeTab === 'banners' && <BannerManager />}
+            {activeTab === 'settings' && <SettingsManager />}
             {activeTab === 'health' && (
                 <div className="max-w-2xl">
                     <div className="mb-6">

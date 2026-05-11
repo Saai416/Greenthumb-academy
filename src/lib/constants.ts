@@ -138,11 +138,11 @@ export const TESTIMONIALS = [
     avatar: "RM",
   },
   {
-    name: "Divya Divya",
+    name: "Sujitha Rajan",
     role: "Student",
     rating: 5,
-    text: "Absolute cinema 🔥🔥. Best tution everrr",
-    avatar: "DD",
+    text: "Green Thumb Academy is an excellent place for students to learn and grow. The teaching is very clear and supportive, making learning easy and enjoyable. The academy provides a positive learning environment where students feel comfortable and motivated. They also give valuable career guidance and help students build confidence for their future. One special thing is the focus on good habits and discipline, which helps students become better individuals. Highly recommended for every student.",
+    avatar: "SR",
   },
 ];
 
