@@ -39,13 +39,13 @@ function TestimonialCard({
     <div
       data-ocid={`reviews.item.${index + 1}`}
       className={[
-        "relative flex flex-col bg-card rounded-2xl shadow-card border border-border",
+        "relative flex flex-col bg-card rounded-2xl shadow-card border border-border snap-center",
         "overflow-hidden select-none flex-shrink-0",
         "w-[min(90vw,360px)] sm:w-[340px] md:w-[380px]",
         "transition-all duration-500",
         isActive
           ? "scale-100 opacity-100"
-          : "scale-95 opacity-50 pointer-events-none",
+          : "scale-95 opacity-50",
       ].join(" ")}
     >
       {/* Top accent bar */}
@@ -88,14 +88,37 @@ export function ReviewsSection() {
   const [isPaused, setIsPaused] = useState(false);
   const total = TESTIMONIALS.length;
   const trackRef = useRef<HTMLDivElement>(null);
-  const touchStartX = useRef<number | null>(null);
   const sectionRef = useScrollReveal<HTMLDivElement>({ threshold: 0.12 });
+  
+  // Used to prevent native scroll event from fighting with button clicks
+  const isScrollingRef = useRef(false);
 
-  const prev = useCallback(
-    () => setActive((a) => (a - 1 + total) % total),
-    [total],
-  );
-  const next = useCallback(() => setActive((a) => (a + 1) % total), [total]);
+  const scrollToIndex = useCallback((index: number) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const card = track.children[index] as HTMLElement | undefined;
+    if (!card) return;
+
+    isScrollingRef.current = true;
+    setActive(index);
+    
+    const trackCenter = track.offsetWidth / 2;
+    const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+    track.scrollTo({ left: cardCenter - trackCenter, behavior: "smooth" });
+
+    // Release the lock after animation completes
+    setTimeout(() => {
+      isScrollingRef.current = false;
+    }, 600);
+  }, []);
+
+  const prev = useCallback(() => {
+    scrollToIndex((active - 1 + total) % total);
+  }, [active, total, scrollToIndex]);
+
+  const next = useCallback(() => {
+    scrollToIndex((active + 1) % total);
+  }, [active, total, scrollToIndex]);
 
   // Auto-advance every 3.5 seconds, pause on hover
   useEffect(() => {
@@ -104,29 +127,37 @@ export function ReviewsSection() {
     return () => clearInterval(timer);
   }, [isPaused, next]);
 
-  // Scroll track to center active card
+  // Handle native scrolling (e.g. user swiping on mobile)
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
-    const card = track.children[active] as HTMLElement | undefined;
-    if (!card) return;
-    const trackCenter = track.offsetWidth / 2;
-    const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-    track.scrollTo({ left: cardCenter - trackCenter, behavior: "smooth" });
-  }, [active]);
 
-  // Touch swipe handlers
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null) return;
-    const diff = touchStartX.current - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 40) {
-      diff > 0 ? next() : prev();
-    }
-    touchStartX.current = null;
-  };
+    const handleScroll = () => {
+      if (isScrollingRef.current) return;
+
+      const trackCenter = track.scrollLeft + track.offsetWidth / 2;
+      let closestIndex = 0;
+      let minDistance = Infinity;
+
+      Array.from(track.children).forEach((child, index) => {
+        const childElement = child as HTMLElement;
+        const childCenter = childElement.offsetLeft + childElement.offsetWidth / 2;
+        const distance = Math.abs(trackCenter - childCenter);
+
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      if (closestIndex !== active) {
+        setActive(closestIndex);
+      }
+    };
+
+    track.addEventListener("scroll", handleScroll, { passive: true });
+    return () => track.removeEventListener("scroll", handleScroll);
+  }, [active]);
 
   return (
     <section
@@ -161,15 +192,13 @@ export function ReviewsSection() {
           onMouseLeave={() => setIsPaused(false)}
           onFocus={() => setIsPaused(true)}
           onBlur={() => setIsPaused(false)}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
           data-ocid="reviews.carousel"
           className="relative"
         >
           {/* Cards track — horizontally scrollable, snap */}
           <div
             ref={trackRef}
-            className="flex gap-5 overflow-hidden touch-pan-y pb-2 scroll-smooth"
+            className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-4 scroll-smooth"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {TESTIMONIALS.map((t, i) => (
@@ -228,7 +257,7 @@ export function ReviewsSection() {
               <button
                 key={t.name}
                 type="button"
-                onClick={() => setActive(i)}
+                onClick={() => scrollToIndex(i)}
                 data-ocid={`reviews.dot.${i + 1}`}
                 aria-label={`Go to review ${i + 1}`}
                 aria-current={i === active ? "true" : undefined}
