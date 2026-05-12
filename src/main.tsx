@@ -22,7 +22,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
-        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/sivamala" element={<AdminPage />} />
       </Routes>
     </BrowserRouter>
   </QueryClientProvider>,
