@@ -112,9 +112,6 @@ export function AdminLayout({ children, activeTab, setActiveTab }: AdminLayoutPr
                         >
                             View Site ↗
                         </a>
-                        <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-[13px] font-bold shadow-sm">
-                            A
-                        </div>
                     </div>
                 </header>
 
