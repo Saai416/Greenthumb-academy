@@ -18,146 +18,97 @@ function StarRating() {
   );
 }
 
-interface TestimonialCardProps {
-  text: string;
-  name: string;
-  role: string;
-  avatar: string;
-  isActive: boolean;
-  index: number;
-}
-
-function TestimonialCard({
-  text,
-  name,
-  role,
-  avatar,
-  isActive,
-  index,
-}: TestimonialCardProps) {
-  return (
-    <div
-      data-ocid={`reviews.item.${index + 1}`}
-      className={[
-        "relative flex flex-col bg-card rounded-2xl shadow-card border border-border snap-center",
-        "overflow-hidden select-none flex-shrink-0",
-        "w-[min(90vw,360px)] sm:w-[340px] md:w-[380px]",
-        "transition-all duration-500",
-        isActive
-          ? "scale-100 opacity-100"
-          : "scale-95 opacity-50",
-      ].join(" ")}
-    >
-      {/* Top accent bar */}
-      <div className="h-1 w-full bg-primary" />
-
-      {/* Content */}
-      <div className="p-6 sm:p-8 flex flex-col gap-4 flex-1">
-        {/* Decorative quote icon */}
-        <Quote className="h-8 w-8 text-primary/20 -mb-2" aria-hidden="true" />
-
-        {/* Stars */}
-        <StarRating />
-
-        {/* Text */}
-        <p className="text-foreground/80 text-sm sm:text-base leading-relaxed font-body flex-1">
-          &ldquo;{text}&rdquo;
-        </p>
-
-        {/* Author */}
-        <div className="flex items-center gap-3 pt-2 border-t border-border/60">
-          <div className="w-10 h-10 rounded-full bg-primary/10 border-2 border-primary/25 flex items-center justify-center font-display font-bold text-primary text-xs flex-shrink-0">
-            {avatar}
-          </div>
-          <div className="min-w-0">
-            <p className="font-display font-semibold text-foreground text-sm truncate">
-              {name}
-            </p>
-            <p className="text-muted-foreground text-xs font-body truncate">
-              {role}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export function ReviewsSection() {
   const [active, setActive] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const total = TESTIMONIALS.length;
-  const trackRef = useRef<HTMLDivElement>(null);
   const sectionRef = useScrollReveal<HTMLDivElement>({ threshold: 0.12 });
-  
-  // Used to prevent native scroll event from fighting with button clicks
-  const isScrollingRef = useRef(false);
 
-  const scrollToIndex = useCallback((index: number) => {
-    const track = trackRef.current;
-    if (!track) return;
-    const card = track.children[index] as HTMLElement | undefined;
-    if (!card) return;
+  // Touch tracking for mobile swipe
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
+  const isSwiping = useRef(false);
 
-    isScrollingRef.current = true;
-    setActive(index);
-    
-    const trackCenter = track.offsetWidth / 2;
-    const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-    track.scrollTo({ left: cardCenter - trackCenter, behavior: "smooth" });
+  const prev = useCallback(
+    () => setActive((a) => (a - 1 + total) % total),
+    [total],
+  );
+  const next = useCallback(
+    () => setActive((a) => (a + 1) % total),
+    [total],
+  );
+  const goTo = useCallback((i: number) => setActive(i), []);
 
-    // Release the lock after animation completes
-    setTimeout(() => {
-      isScrollingRef.current = false;
-    }, 600);
-  }, []);
-
-  const prev = useCallback(() => {
-    scrollToIndex((active - 1 + total) % total);
-  }, [active, total, scrollToIndex]);
-
-  const next = useCallback(() => {
-    scrollToIndex((active + 1) % total);
-  }, [active, total, scrollToIndex]);
-
-  // Auto-advance every 3.5 seconds, pause on hover
+  // Auto-advance every 4s, pause on hover / touch
   useEffect(() => {
     if (isPaused) return;
-    const timer = setInterval(next, 3500);
-    return () => clearInterval(timer);
+    const id = setInterval(next, 4000);
+    return () => clearInterval(id);
   }, [isPaused, next]);
 
-  // Handle native scrolling (e.g. user swiping on mobile)
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
+  // Touch handlers — horizontal-lock swipe
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+    isSwiping.current = false;
+    setIsPaused(true);
+  };
 
-    const handleScroll = () => {
-      if (isScrollingRef.current) return;
+  const handleTouchMove = (e: React.TouchEvent) => {
+    const dx = Math.abs(e.touches[0].clientX - touchStartX.current);
+    const dy = Math.abs(e.touches[0].clientY - touchStartY.current);
+    if (dx > dy && dx > 10) {
+      isSwiping.current = true;
+    }
+  };
 
-      const trackCenter = track.scrollLeft + track.offsetWidth / 2;
-      let closestIndex = 0;
-      let minDistance = Infinity;
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!isSwiping.current) {
+      setIsPaused(false);
+      return;
+    }
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      diff > 0 ? next() : prev();
+    }
+    setIsPaused(false);
+  };
 
-      Array.from(track.children).forEach((child, index) => {
-        const childElement = child as HTMLElement;
-        const childCenter = childElement.offsetLeft + childElement.offsetWidth / 2;
-        const distance = Math.abs(trackCenter - childCenter);
+  // Compute card style for the 3-card sliding carousel
+  const getCardStyle = (index: number): React.CSSProperties => {
+    let offset = index - active;
+    if (offset > total / 2) offset -= total;
+    if (offset < -total / 2) offset += total;
 
-        if (distance < minDistance) {
-          minDistance = distance;
-          closestIndex = index;
-        }
-      });
+    const isCenter = offset === 0;
+    const isAdjacent = Math.abs(offset) === 1;
 
-      if (closestIndex !== active) {
-        setActive(closestIndex);
-      }
+    if (isCenter) {
+      return {
+        transform: "translateX(0) scale(1)",
+        opacity: 1,
+        zIndex: 3,
+        pointerEvents: "auto",
+        visibility: "visible",
+      };
+    }
+    if (isAdjacent) {
+      return {
+        transform: `translateX(${offset * 105}%) scale(0.88)`,
+        opacity: 0.45,
+        zIndex: 2,
+        pointerEvents: "none",
+        visibility: "visible",
+      };
+    }
+    return {
+      transform: `translateX(${offset > 0 ? 200 : -200}%) scale(0.8)`,
+      opacity: 0,
+      zIndex: 1,
+      pointerEvents: "none",
+      visibility: "hidden",
     };
-
-    track.addEventListener("scroll", handleScroll, { passive: true });
-    return () => track.removeEventListener("scroll", handleScroll);
-  }, [active]);
+  };
 
   return (
     <section
@@ -190,37 +141,74 @@ export function ReviewsSection() {
         <div
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
-          onFocus={() => setIsPaused(true)}
-          onBlur={() => setIsPaused(false)}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
           data-ocid="reviews.carousel"
           className="relative"
         >
-          {/* Cards track — horizontally scrollable, snap */}
+          {/*
+            Grid-stacked cards: all cards sit in the same grid cell (1/1).
+            The tallest card determines the container height naturally.
+            Transform handles the sliding effect.
+          */}
           <div
-            ref={trackRef}
-            className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-4 scroll-smooth"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            className="grid items-center justify-items-center"
+            style={{ gridTemplateColumns: "1fr", gridTemplateRows: "1fr" }}
           >
             {TESTIMONIALS.map((t, i) => (
-              <TestimonialCard
+              <div
                 key={t.name}
-                text={t.text}
-                name={t.name}
-                role={t.role}
-                avatar={t.avatar}
-                isActive={i === active}
-                index={i}
-              />
+                data-ocid={`reviews.item.${i + 1}`}
+                className="flex flex-col bg-card rounded-2xl shadow-card border border-border overflow-hidden select-none w-[min(88vw,400px)] sm:w-[380px] md:w-[420px]"
+                style={{
+                  gridArea: "1 / 1",
+                  ...getCardStyle(i),
+                  transition: "transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.5s ease, visibility 0s linear 0s",
+                }}
+              >
+                {/* Top accent bar */}
+                <div className="h-1 w-full bg-primary" />
+
+                {/* Content */}
+                <div className="p-6 sm:p-8 flex flex-col gap-4 flex-1">
+                  {/* Decorative quote icon */}
+                  <Quote className="h-8 w-8 text-primary/20 -mb-2" aria-hidden="true" />
+
+                  {/* Stars */}
+                  <StarRating />
+
+                  {/* Text */}
+                  <p className="text-foreground/80 text-sm sm:text-base leading-relaxed font-body flex-1">
+                    &ldquo;{t.text}&rdquo;
+                  </p>
+
+                  {/* Author */}
+                  <div className="flex items-center gap-3 pt-2 border-t border-border/60">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 border-2 border-primary/25 flex items-center justify-center font-display font-bold text-primary text-xs flex-shrink-0">
+                      {t.avatar}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-display font-semibold text-foreground text-sm truncate">
+                        {t.name}
+                      </p>
+                      <p className="text-muted-foreground text-xs font-body truncate">
+                        {t.role}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
 
-          {/* Desktop prev/next arrows */}
+          {/* Arrow buttons — always visible */}
           <button
             type="button"
             onClick={prev}
             data-ocid="reviews.pagination_prev"
             aria-label="Previous review"
-            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-5 w-10 h-10 rounded-full bg-card border border-border shadow-card hover:border-primary hover:text-primary items-center justify-center transition-smooth z-10"
+            className="absolute left-2 sm:left-0 top-1/2 -translate-y-1/2 md:-translate-x-5 w-10 h-10 rounded-full bg-card border border-border shadow-card hover:border-primary hover:text-primary flex items-center justify-center transition-smooth z-10"
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
@@ -229,58 +217,30 @@ export function ReviewsSection() {
             onClick={next}
             data-ocid="reviews.pagination_next"
             aria-label="Next review"
-            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-5 w-10 h-10 rounded-full bg-card border border-border shadow-card hover:border-primary hover:text-primary items-center justify-center transition-smooth z-10"
+            className="absolute right-2 sm:right-0 top-1/2 -translate-y-1/2 md:translate-x-5 w-10 h-10 rounded-full bg-card border border-border shadow-card hover:border-primary hover:text-primary flex items-center justify-center transition-smooth z-10"
           >
             <ChevronRight className="h-5 w-5" />
           </button>
         </div>
 
-        {/* Dot indicators + mobile arrows */}
-        <div className="flex items-center justify-center gap-4 mt-8">
-          {/* Mobile prev */}
-          <button
-            type="button"
-            onClick={prev}
-            data-ocid="reviews.mobile_prev"
-            aria-label="Previous review"
-            className="md:hidden w-9 h-9 rounded-full border border-border hover:border-primary hover:text-primary flex items-center justify-center transition-smooth"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </button>
-
-          {/* Dots */}
-          <div
-            className="flex items-center gap-2"
-            data-ocid="reviews.dot_indicators"
-          >
-            {TESTIMONIALS.map((t, i) => (
-              <button
-                key={t.name}
-                type="button"
-                onClick={() => scrollToIndex(i)}
-                data-ocid={`reviews.dot.${i + 1}`}
-                aria-label={`Go to review ${i + 1}`}
-                aria-current={i === active ? "true" : undefined}
-                className={[
-                  "h-2 rounded-full transition-all duration-300",
-                  i === active
-                    ? "bg-primary w-7"
-                    : "bg-border w-2 hover:bg-primary/40",
-                ].join(" ")}
-              />
-            ))}
-          </div>
-
-          {/* Mobile next */}
-          <button
-            type="button"
-            onClick={next}
-            data-ocid="reviews.mobile_next"
-            aria-label="Next review"
-            className="md:hidden w-9 h-9 rounded-full border border-border hover:border-primary hover:text-primary flex items-center justify-center transition-smooth"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </button>
+        {/* Dot indicators */}
+        <div className="flex items-center justify-center gap-2 mt-8">
+          {TESTIMONIALS.map((t, i) => (
+            <button
+              key={t.name}
+              type="button"
+              onClick={() => goTo(i)}
+              data-ocid={`reviews.dot.${i + 1}`}
+              aria-label={`Go to review ${i + 1}`}
+              aria-current={i === active ? "true" : undefined}
+              className={[
+                "h-2 rounded-full transition-all duration-300",
+                i === active
+                  ? "bg-primary w-7"
+                  : "bg-border w-2 hover:bg-primary/40",
+              ].join(" ")}
+            />
+          ))}
         </div>
 
         {/* Progress bar */}
