@@ -202,13 +202,13 @@ export function ReviewsSection() {
             ))}
           </div>
 
-          {/* Arrow buttons — always visible */}
+          {/* Desktop prev/next arrows */}
           <button
             type="button"
             onClick={prev}
             data-ocid="reviews.pagination_prev"
             aria-label="Previous review"
-            className="absolute left-2 sm:left-0 top-1/2 -translate-y-1/2 md:-translate-x-5 w-10 h-10 rounded-full bg-card border border-border shadow-card hover:border-primary hover:text-primary flex items-center justify-center transition-smooth z-10"
+            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-5 w-10 h-10 rounded-full bg-card border border-border shadow-card hover:border-primary hover:text-primary items-center justify-center transition-smooth z-10"
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
@@ -217,30 +217,55 @@ export function ReviewsSection() {
             onClick={next}
             data-ocid="reviews.pagination_next"
             aria-label="Next review"
-            className="absolute right-2 sm:right-0 top-1/2 -translate-y-1/2 md:translate-x-5 w-10 h-10 rounded-full bg-card border border-border shadow-card hover:border-primary hover:text-primary flex items-center justify-center transition-smooth z-10"
+            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-5 w-10 h-10 rounded-full bg-card border border-border shadow-card hover:border-primary hover:text-primary items-center justify-center transition-smooth z-10"
           >
             <ChevronRight className="h-5 w-5" />
           </button>
         </div>
 
-        {/* Dot indicators */}
-        <div className="flex items-center justify-center gap-2 mt-8">
-          {TESTIMONIALS.map((t, i) => (
-            <button
-              key={t.name}
-              type="button"
-              onClick={() => goTo(i)}
-              data-ocid={`reviews.dot.${i + 1}`}
-              aria-label={`Go to review ${i + 1}`}
-              aria-current={i === active ? "true" : undefined}
-              className={[
-                "h-2 rounded-full transition-all duration-300",
-                i === active
-                  ? "bg-primary w-7"
-                  : "bg-border w-2 hover:bg-primary/40",
-              ].join(" ")}
-            />
-          ))}
+        {/* Dot indicators + mobile arrows */}
+        <div className="flex items-center justify-center gap-4 mt-8">
+          {/* Mobile prev */}
+          <button
+            type="button"
+            onClick={prev}
+            data-ocid="reviews.mobile_prev"
+            aria-label="Previous review"
+            className="md:hidden w-9 h-9 rounded-full border border-border hover:border-primary hover:text-primary flex items-center justify-center transition-smooth"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+
+          {/* Dots */}
+          <div className="flex items-center gap-2" data-ocid="reviews.dot_indicators">
+            {TESTIMONIALS.map((t, i) => (
+              <button
+                key={t.name}
+                type="button"
+                onClick={() => goTo(i)}
+                data-ocid={`reviews.dot.${i + 1}`}
+                aria-label={`Go to review ${i + 1}`}
+                aria-current={i === active ? "true" : undefined}
+                className={[
+                  "h-2 rounded-full transition-all duration-300",
+                  i === active
+                    ? "bg-primary w-7"
+                    : "bg-border w-2 hover:bg-primary/40",
+                ].join(" ")}
+              />
+            ))}
+          </div>
+
+          {/* Mobile next */}
+          <button
+            type="button"
+            onClick={next}
+            data-ocid="reviews.mobile_next"
+            aria-label="Next review"
+            className="md:hidden w-9 h-9 rounded-full border border-border hover:border-primary hover:text-primary flex items-center justify-center transition-smooth"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
         </div>
 
         {/* Progress bar */}
