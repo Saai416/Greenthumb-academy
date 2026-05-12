@@ -169,7 +169,7 @@ export function ReviewsSection() {
           {/* Cards track — horizontally scrollable, snap */}
           <div
             ref={trackRef}
-            className="flex gap-5 overflow-x-auto pb-2 scroll-smooth"
+            className="flex gap-5 overflow-hidden touch-pan-y pb-2 scroll-smooth"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {TESTIMONIALS.map((t, i) => (
